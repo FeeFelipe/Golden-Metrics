@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  locust:
+    image: locustio/locust:2.29.1
+    env_file: .env
+    command: >
+      -f /mnt/locust/locustfile.py
+      --host ${TARGET_HOST}
+      --headless
+      -u ${LOCUST_USERS}
+      -r ${LOCUST_SPAWN_RATE}
+      -t ${LOCUST_DURATION}
+    volumes:
+      - ./load:/mnt/locust
+    network_mode: host
+
+  # Serviço alvo opcional (modo demo). Ative com: docker compose --profile demo up -d
+  app:
+    profiles: ["demo"]
+    build: ./app
+    environment:
+      FLASK_ENV: production
+    ports: ["8080:8080"]
