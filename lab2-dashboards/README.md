@@ -25,9 +25,12 @@ docker compose up -d --build
 ```
 
 ### 2. Acessar os serviços
-- App: http://localhost:8080/orders  
-- Prometheus: http://localhost:9090  
-- Grafana: http://localhost:3000 (admin / admin)
+
+### 2.1. Validar Prometheus
+Para garantir que o Prometheus está recebendo as métricas:
+- Acesse: http://localhost:9090
+- No campo "Expression", digite por exemplo: `http_server_requests_total` e clique em "Execute".
+- Você deve ver as métricas sendo exibidas. Isso confirma que o Prometheus está recebendo dados do serviço.
 
 ### 3. Gerar tráfego
 ```bash
