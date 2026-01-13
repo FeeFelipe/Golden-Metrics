@@ -31,13 +31,13 @@
           "refId": "A"
         }
       ],
-      "title": "Requisições HTTP por segundo",
+      "title": "Taxa de Requisições por Segundo (RPS)",
       "type": "timeseries"
     },
     {
       "datasource": "Tempo",
       "type": "table",
-      "title": "Traces - Orders Service (Table)",
+      "title": "Traces - Serviço de Pedidos (Tabela)",
       "gridPos": {
         "h": 10,
         "w": 24,
