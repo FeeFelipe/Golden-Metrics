@@ -1,8 +1,11 @@
-version: "3.9"
 services:
   locust:
     image: locustio/locust:2.29.1
-    env_file: .env
+    environment:
+      TARGET_HOST: http://localhost:8080
+      LOCUST_USERS: 80
+      LOCUST_SPAWN_RATE: 10
+      LOCUST_DURATION: 5m
     command: >
       -f /mnt/locust/locustfile.py
       --host ${TARGET_HOST}
@@ -14,10 +17,55 @@ services:
       - ./load:/mnt/locust
     network_mode: host
 
-  # Serviço alvo opcional (modo demo). Ative com: docker compose --profile demo up -d
   app:
-    profiles: ["demo"]
     build: ./app
     environment:
-      FLASK_ENV: production
-    ports: ["8080:8080"]
+      OTEL_SERVICE_NAME: orders-service
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+      OTEL_METRICS_EXPORTER: otlp
+      OTEL_TRACES_EXPORTER: none
+      OTEL_RESOURCE_ATTRIBUTES: deployment.environment=dev
+    ports:
+      - "8080:8080"
+    depends_on:
+      - otel-collector
+
+  otel-collector:
+    image: otel/opentelemetry-collector:0.103.1
+    command: ["--config=/etc/otel/config.yaml"]
+    volumes:
+      - ./otel-collector/config.yaml:/etc/otel/config.yaml:ro
+    ports:
+      - "4317:4317"
+      - "9464:9464"
+
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/rules:/etc/prometheus/rules:ro
+    command: ["--config.file=/etc/prometheus/prometheus.yml", "--web.enable-lifecycle"]
+    ports:
+      - "9090:9090"
+    depends_on:
+      - otel-collector
+      - alertmanager
+
+  alertmanager:
+    image: prom/alertmanager:v0.27.0
+    volumes:
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+    command: ["--config.file=/etc/alertmanager/alertmanager.yml"]
+    ports:
+      - "9093:9093"
+
+  grafana:
+    image: grafana/grafana:11.2.2
+    environment: [GF_SECURITY_ADMIN_PASSWORD=admin]
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus

@@ -1,0 +1,11 @@
+route:
+  receiver: "in-memory"
+  group_by: ["alertname"]
+  group_wait: 10s
+  group_interval: 1m
+  repeat_interval: 30m
+
+receivers:
+  - name: "in-memory"
+    webhook_configs:
+      - url: "http://127.0.0.1:1"  # placeholder (não entrega; use UI do Alertmanager)

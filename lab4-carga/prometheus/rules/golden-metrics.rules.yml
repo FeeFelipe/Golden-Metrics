@@ -1,0 +1,28 @@
+groups:
+  - name: golden-metrics
+    rules:
+      - record: job:http_error_rate
+        expr: |
+          sum(rate(http_server_requests_total{http_status=~"5.."}[2m]))
+          / sum(rate(http_server_requests_total[2m]))
+
+      - alert: HighErrorRate
+        expr: job:http_error_rate > 0.02
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Erro > 2% por 2m"
+          description: "A taxa de erro (5xx) excedeu 2% nos últimos 2 minutos."
+
+      - alert: HighLatencyP99
+        expr: |
+          histogram_quantile(0.99,
+            sum(rate(http_server_request_duration_seconds_bucket[2m])) by (le))
+          > 1.5
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "P99 > 1.5s por 2m"
+          description: "A latência P99 está acima de 1.5s por pelo menos 2 minutos."
