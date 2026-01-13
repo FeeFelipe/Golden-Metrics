@@ -25,10 +25,16 @@
       "options": {},
       "targets": [
         {
-          "expr": "rate(http_server_requests_total[1m])",
+          "expr": "rate(http_server_requests_total{http_status=\"200\"}[1m])",
           "interval": "",
-          "legendFormat": "{{endpoint}} {{http_status}}",
-          "refId": "A"
+          "legendFormat": "RPS 200",
+          "refId": "B"
+        },
+        {
+          "expr": "rate(http_server_requests_total{http_status=\"500\"}[1m])",
+          "interval": "",
+          "legendFormat": "RPS 500",
+          "refId": "C"
         }
       ],
       "title": "Taxa de Requisições por Segundo (RPS)",

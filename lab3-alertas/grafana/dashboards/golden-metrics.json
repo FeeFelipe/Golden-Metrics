@@ -6,7 +6,7 @@
       "type": "timeseries",
       "title": "Taxa de Requisições por Segundo (RPS)",
       "targets": [
-        {"expr": "sum(rate(http_server_requests_total[1m]))", "refId": "A"}
+        {"expr": "sum(rate(http_server_requests_total[1m]))", "refId": "A", "legendFormat": "RPS"}
       ],
       "gridPos": {"h": 10, "w": 24, "x": 0, "y": 0}
     },
@@ -14,7 +14,7 @@
       "type": "timeseries",
       "title": "Taxa de Erro (%)",
       "targets": [
-        {"expr": "sum(rate(http_server_requests_total{http_status=~\"5..\"}[5m])) / sum(rate(http_server_requests_total[5m])) * 100", "refId": "B"}
+        {"expr": "sum(rate(http_server_requests_total{http_status=~\"5..\"}[5m])) / sum(rate(http_server_requests_total[5m])) * 100", "refId": "B", "legendFormat": "Erro (%)"}
       ],
       "gridPos": {"h": 10, "w": 24, "x": 0, "y": 10}
     },
@@ -22,7 +22,7 @@
       "type": "timeseries",
       "title": "Latência P99 (segundos)",
       "targets": [
-        {"expr": "histogram_quantile(0.99, sum(rate(http_server_request_duration_seconds_bucket[5m])) by (le))", "refId": "C"}
+        {"expr": "histogram_quantile(0.99, sum(rate(http_server_request_duration_seconds_bucket[5m])) by (le))", "refId": "C", "legendFormat": "P99 Latência (s)"}
       ],
       "gridPos": {"h": 10, "w": 24, "x": 0, "y": 20}
     }
