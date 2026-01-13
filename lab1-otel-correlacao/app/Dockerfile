@@ -1,9 +1,7 @@
-FROM python:3.12-slim
+FROM node:18-slim
 WORKDIR /app
-COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
-COPY app.py /app/
-COPY start.sh /app/
-RUN chmod +x /app/start.sh
+COPY package.json /app/
+RUN npm install --omit=dev
+COPY . /app/
 EXPOSE 8080
-CMD ["/app/start.sh"]
+CMD ["node", "start.js"]

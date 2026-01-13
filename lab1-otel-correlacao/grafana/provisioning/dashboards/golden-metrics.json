@@ -1,0 +1,80 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "iteration": 162,
+  "links": [],
+  "panels": [
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {},
+      "targets": [
+        {
+          "expr": "rate(http_server_requests_total[1m])",
+          "interval": "",
+          "legendFormat": "{{endpoint}} {{http_status}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Requisições HTTP por segundo",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Tempo",
+      "type": "table",
+      "title": "Traces - Orders Service (Table)",
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "id": 2,
+      "targets": [
+        {
+          "queryType": "traceql",
+          "query": "{ resource.service.name = \"orders-service\" && trace:rootName = \"GET /orders\" }",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {
+        "showHeader": true
+      }
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 37,
+  "style": "dark",
+  "tags": ["golden-metrics"],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Golden Metrics",
+  "uid": "golden-metrics",
+  "version": 1
+}

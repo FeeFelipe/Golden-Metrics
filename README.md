@@ -11,7 +11,7 @@ Cada lab é independente e pode ser executado separadamente, mas juntos formam u
 
 ```
 observabilidade-labs/
-├─ lab1-otel-correlacao/      → Correlação com OpenTelemetry (Metrics + Logs + Traces)
+├─ lab1-otel-correlacao/      → Correlação com OpenTelemetry (Metrics + Traces)
 ├─ lab2-dashboards/           → Dashboards de Observabilidade (Golden Metrics)
 ├─ lab3-alertas/              → Configuração de Alertas (SLO-driven)
 └─ lab4-carga/                → Simulação de Carga (Locust)
@@ -21,7 +21,7 @@ observabilidade-labs/
 
 ## 🎯 Objetivos Gerais
 
-1. **Instrumentar aplicações** com OpenTelemetry para coletar métricas, logs e traces.  
+1. **Instrumentar aplicações** com OpenTelemetry para coletar métricas e traces.  
 2. **Visualizar Golden Metrics** em dashboards no Grafana.  
 3. **Configurar alertas** alinhados a SLIs e SLOs.  
 4. **Simular carga** para validar observabilidade e resposta a incidentes.  
@@ -38,13 +38,13 @@ observabilidade-labs/
 
 ## 🚀 Ordem sugerida de execução
 
+
 ### 🔹 **LAB 1 — Correlação na prática com OpenTelemetry**
 - Suba o ambiente com `docker compose up -d`.  
 - Gere tráfego e explore no Grafana:  
   - Métricas (Prometheus)  
-  - Logs (Loki)  
   - Traces (Tempo)  
-- **Objetivo:** entender a correlação entre *Metrics, Logs e Traces (MLT)*.
+- **Objetivo:** entender a correlação entre *Metrics e Traces*.
 
 📂 Pasta: `lab1-otel-correlacao/`  
 📘 [README do Lab 1](lab1-otel-correlacao/README.md)
@@ -86,7 +86,6 @@ observabilidade-labs/
 | Conceito | Aplicado em | Descrição |
 |-----------|--------------|-----------|
 | **Metrics** | Labs 1–3 | Dados quantitativos (latência, erro, tráfego) |
-| **Logs** | Lab 1 | Contexto detalhado de eventos e exceções |
 | **Traces** | Lab 1 | Jornada ponta a ponta da requisição |
 | **Dashboards** | Lab 2 | Visualização e análise de comportamento |
 | **Alertas SLO-driven** | Lab 3 | Ações baseadas em impacto real no usuário |
@@ -100,7 +99,7 @@ observabilidade-labs/
 |------------|-------------|
 | Instrumentação | **OpenTelemetry SDK / Collector** |
 | Métricas | **Prometheus** |
-| Logs | **Loki** |
+| Logs | (não utilizado neste lab) |
 | Traces | **Tempo** |
 | Visualização | **Grafana** |
 | Alertas | **Prometheus Alertmanager** |
@@ -111,7 +110,7 @@ observabilidade-labs/
 ## 🔄 Relação entre os Labs
 
 ```
-[L1] OpenTelemetry → Prometheus/Loki/Tempo → Grafana
+[L1] OpenTelemetry → Prometheus/Tempo → Grafana
 [L2] Prometheus → Dashboards Golden Metrics
 [L3] Prometheus + Alertmanager → Alertas SLO-driven
 [L4] Locust → Gera carga → Alimenta métricas e dispara alertas

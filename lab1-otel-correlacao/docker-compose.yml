@@ -1,16 +1,14 @@
-version: "3.9"
 services:
   app:
     build: ./app
     environment:
       OTEL_SERVICE_NAME: orders-service
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
-      OTEL_TRACES_EXPORTER: otlp
-      OTEL_METRICS_EXPORTER: otlp
-      OTEL_LOGS_EXPORTER: otlp
       OTEL_RESOURCE_ATTRIBUTES: deployment.environment=dev
-    ports: ["8080:8080"]
-    depends_on: [otel-collector]
+    ports:
+      - "8080:8080"
+    depends_on:
+      - otel-collector
 
   otel-collector:
     image: otel/opentelemetry-collector:0.103.1
@@ -23,23 +21,39 @@ services:
     image: prom/prometheus:v2.55.1
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
     ports: ["9090:9090"]
     depends_on: [otel-collector]
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:9090/-/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  loki:
-    image: grafana/loki:2.9.7
-    command: -config.file=/etc/loki/local-config.yaml
-    ports: ["3100:3100"]
 
   tempo:
     image: grafana/tempo:2.5.0
     command: [ "-config.file=/etc/tempo.yaml" ]
-    ports: ["3200:3200"]
+    volumes:
+      - ./tempo.yaml:/etc/tempo.yaml:ro
+    ports:
+      - "3200:3200"
 
   grafana:
     image: grafana/grafana:11.2.2
-    environment: [GF_SECURITY_ADMIN_PASSWORD=admin]
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GF_SECURITY_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD:-admin}
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning
+      - grafana_data:/var/lib/grafana
     ports: ["3000:3000"]
-    depends_on: [prometheus,loki,tempo]
+    depends_on: [prometheus,tempo]
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+volumes:
+  prometheus_data:
+  grafana_data:

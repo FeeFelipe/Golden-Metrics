@@ -1,0 +1,18 @@
+{
+  "name": "orders-service",
+  "version": "1.0.0",
+  "description": "Node.js version of the orders service for OpenTelemetry lab",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "prom-client": "^14.1.1",
+    "@opentelemetry/api": "1.7.0",
+    "@opentelemetry/sdk-node": "0.45.0",
+    "@opentelemetry/auto-instrumentations-node": "0.45.0",
+    "@opentelemetry/exporter-trace-otlp-grpc": "0.45.0",
+    "@opentelemetry/instrumentation-express": "0.45.0"
+  }
+}
