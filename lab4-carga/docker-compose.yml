@@ -8,11 +8,11 @@ services:
       LOCUST_DURATION: 5m
     command: >
       -f /mnt/locust/locustfile.py
-      --host ${TARGET_HOST}
+      --host ${TARGET_HOST:-http://localhost:8080}
       --headless
-      -u ${LOCUST_USERS}
-      -r ${LOCUST_SPAWN_RATE}
-      -t ${LOCUST_DURATION}
+      -u ${LOCUST_USERS:-80}
+      -r ${LOCUST_SPAWN_RATE:-10}
+      -t ${LOCUST_DURATION:-5m}
     volumes:
       - ./load:/mnt/locust
     network_mode: host
