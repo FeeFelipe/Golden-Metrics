@@ -62,6 +62,16 @@ watch -n 0.5 curl -s http://localhost:8080/orders > /dev/null
 
 ---
 
+## 🧪 Testes
+Para validar os cenários do lab (config OTel/Tempo, POST/GET `/orders`, dashboard):
+```bash
+pip install -r tests/requirements.txt
+pytest tests/ -v
+```
+Ver `tests/README.md` para testes E2E.
+
+---
+
 ## 🧩 Encerramento
 Pare o ambiente após o teste:
 ```bash

@@ -7,7 +7,7 @@ services:
       OTEL_METRICS_EXPORTER: otlp
       OTEL_TRACES_EXPORTER: none
       OTEL_RESOURCE_ATTRIBUTES: deployment.environment=dev
-    ports: ["8080:8080"]
+    ports: ["${APP_PORT:-8080}:8080"]
     depends_on: [otel-collector]
 
   otel-collector:
@@ -23,7 +23,7 @@ services:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ./prometheus/rules:/etc/prometheus/rules:ro
     command: ["--config.file=/etc/prometheus/prometheus.yml", "--web.enable-lifecycle"]
-    ports: ["9090:9090"]
+    ports: ["${PROMETHEUS_PORT:-9090}:9090"]
     depends_on: [otel-collector, alertmanager]
 
   alertmanager:
@@ -31,7 +31,7 @@ services:
     volumes:
       - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
     command: ["--config.file=/etc/alertmanager/alertmanager.yml"]
-    ports: ["9093:9093"]
+    ports: ["${ALERTMANAGER_PORT:-9093}:9093"]
 
   grafana:
     image: grafana/grafana:11.2.2
@@ -39,5 +39,5 @@ services:
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning
       - ./grafana/dashboards:/var/lib/grafana/dashboards
-    ports: ["3000:3000"]
+    ports: ["${GRAFANA_PORT:-3000}:3000"]
     depends_on: [prometheus]

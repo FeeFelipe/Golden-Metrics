@@ -8,7 +8,9 @@ storage:
   trace:
     backend: local
     local:
-      path: /tmp/tempo
+      # Diretório só para blocos de traces; WAL em path separado para evitar
+      # que o poller interprete a pasta "wal" como tenant (erro "invalid UUID length").
+      path: /tmp/tempo/blocks
     wal:
       path: /tmp/tempo/wal
 

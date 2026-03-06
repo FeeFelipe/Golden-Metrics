@@ -7,7 +7,7 @@ services:
       OTEL_TRACES_EXPORTER: otlp
       OTEL_METRICS_EXPORTER: otlp
       OTEL_RESOURCE_ATTRIBUTES: deployment.environment=dev
-    ports: ["8080:8080"]
+    ports: ["${APP_PORT:-8080}:8080"]
     depends_on: [otel-collector]
 
   otel-collector:
@@ -21,7 +21,7 @@ services:
     image: prom/prometheus:v2.55.1
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-    ports: ["9090:9090"]
+    ports: ["${PROMETHEUS_PORT:-9090}:9090"]
     depends_on: [otel-collector]
 
   grafana:
@@ -30,5 +30,5 @@ services:
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning
       - ./grafana/dashboards:/var/lib/grafana/dashboards
-    ports: ["3000:3000"]
+    ports: ["${GRAFANA_PORT:-3000}:3000"]
     depends_on: [prometheus]

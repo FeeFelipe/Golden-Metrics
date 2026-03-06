@@ -25,20 +25,27 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-app.get('/orders', async (req, res) => {
+function handleOrders(req, res, method) {
   const latency = [0.05, 0.1, 0.2, 0.4, 0.8, 1.2, 2.0][randomInt(0, 6)];
   const end = reqLatency.startTimer();
-  await new Promise(r => setTimeout(r, latency * 1000));
-  if (Math.random() < 0.08) {
-    reqCounter.inc({ endpoint: '/orders', method: 'GET', http_status: '500' });
-    end();
-    res.status(500).json({ error: 'payment timeout' });
-  } else {
-    reqCounter.inc({ endpoint: '/orders', method: 'GET', http_status: '200' });
-    end();
-    res.json({ items: [{ id: 1, amount: 42.0 }], latency });
-  }
-});
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      if (Math.random() < 0.08) {
+        reqCounter.inc({ endpoint: '/orders', method, http_status: '500' });
+        end();
+        res.status(500).json({ error: 'payment timeout' });
+      } else {
+        reqCounter.inc({ endpoint: '/orders', method, http_status: '200' });
+        end();
+        res.json({ items: [{ id: 1, amount: 42.0 }], latency });
+      }
+      resolve();
+    }, latency * 1000);
+  });
+}
+
+app.get('/orders', (req, res) => handleOrders(req, res, 'GET'));
+app.post('/orders', (req, res) => handleOrders(req, res, 'POST'));
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {

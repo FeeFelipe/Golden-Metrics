@@ -78,6 +78,15 @@ Se não aparecer, confira se o arquivo `grafana/dashboards/golden-metrics.json` 
 
 ---
 
+## 🧪 Testes
+Para validar as regras de alerta e o Alertmanager:
+```bash
+pip install -r tests/requirements.txt
+pytest tests/ -v
+```
+
+---
+
 ## 🛠 Ajustes úteis
 - Para acelerar o disparo, reduza o `for:` para `1m` e a janela do `rate()` para `1m`.
 - Para enviar para Slack/E-mail, edite `alertmanager/alertmanager.yml` adicionando um `receiver` real.

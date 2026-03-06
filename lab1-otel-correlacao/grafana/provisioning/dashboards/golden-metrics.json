@@ -54,7 +54,7 @@
       "targets": [
         {
           "queryType": "traceql",
-          "query": "{ resource.service.name = \"orders-service\" && trace:rootName = \"GET /orders\" }",
+          "query": "{ resource.service.name = \"orders-service\" && (trace:rootName = \"GET /orders\" || trace:rootName = \"POST /orders\") }",
           "refId": "A"
         }
       ],

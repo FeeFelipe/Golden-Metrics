@@ -36,6 +36,38 @@ observabilidade-labs/
 
 ---
 
+## 🧪 Testes dos cenários
+
+### Rodar cenários dos READMEs (subir, validar, derrubar)
+
+Na raiz do repositório, use o script que sobe cada lab, valida os endpoints e derruba:
+
+```bash
+./scripts/run-lab-scenarios.sh        # sobe cada lab, testa, derruba
+./scripts/run-lab-scenarios.sh --build   # com rebuild das imagens
+```
+
+Se as portas **8080**, **9090** ou **3000** estiverem em uso, o script usa portas alternativas (9080, 9091, 3010). No início ele faz `docker compose down -v` em todos os labs para evitar conflitos (ex.: porta 4317 do OTel Collector).
+
+### Testes de configuração (pytest por lab)
+
+Cada lab é **independente** e tem sua própria pasta `tests/`. Para validar apenas a configuração (sem subir Docker):
+
+```bash
+cd lab1-otel-correlacao   # ou lab2-dashboards, lab3-alertas, lab4-carga
+pip install -r tests/requirements.txt
+pytest tests/ -v
+```
+
+- **Lab 1:** config OTel/Tempo/Prometheus, POST/GET `/orders`, dashboard; E2E opcional com `pytest tests/ -m e2e`.
+- **Lab 2:** painéis do dashboard (RPS, Taxa de Erro, Latência).
+- **Lab 3:** regras de alerta SLO-driven, Alertmanager.
+- **Lab 4:** Locust, app com latência/erros, regras de alerta.
+
+Cada lab tem um `tests/README.md` com instruções.
+
+---
+
 ## 🚀 Ordem sugerida de execução
 
 

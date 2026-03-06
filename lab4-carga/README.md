@@ -76,7 +76,8 @@ Execute todos os comandos dentro da pasta `lab4-carga` para garantir que o Docke
 7. Valide:
 	- Métricas e alertas no Grafana e Prometheus
 	- Serviço demo respondendo em /health e /orders
-8. Para encerrar:
+8. **Testes:** para validar cenários (Locust, alertas): `pip install -r tests/requirements.txt && pytest tests/ -v`
+9. Para encerrar:
 	```bash
 	docker compose down -v
 	```
